@@ -1,35 +1,26 @@
-# Struct for reading and storing CBS boundary definition (.bco file extension)
-#
-#     Boundary Condition File
-#     -------------------------
-#     The 1st line defines how many boundary side types are present in the mesh (NFLAG). Following this will then be NFLAG
-#     entries in the FLAG_LIST array. This array replaces boundary side numbers in the PLT file with boundary flag codes.
-#     This procedure is to avoid regenerating the mesh each time you change the boundary conditions. Currently, The available
-#     flag codes are:
-#     
-#     !     500 - adiabatic with prescribed velocity
-#     !     501 - constant temperature with no-slip (T = 1)
-#     !     502 - constant temperature with no-slip(T = 0)
-#     !     503 - constant temperature (T = 0) prescribed velocity (u=1,v=0)
-#     !     504 - pressure boundary
-#     !     506 - velocity symmetry, no-flux energy
-#     !     507 - Backward Facing Step (Re=229) Parabolic Boundary (with v=0)
-    
+"CBS boundary definition"
 struct CbsBoundaryDefinition
-    flagList::Int32 # boundary side number in the mesh file
-    flagCode::Int32 # boundary code
+    "Boundary side ID number"
+    flagList::Int32
+
+    """
+    Boundary type code. Options:\n
+    500 - adiabatic with prescribed velocity\n
+    501 - constant temperature with no-slip (T = 1)\n
+    502 - constant temperature with no-slip(T = 0)\n
+    503 - constant temperature (T = 0) prescribed velocity (u=1,v=0)\n
+    504 - pressure boundary\n
+    506 - velocity symmetry, no-flux energy\n
+    507 - Backward Facing Step (Re=229) Parabolic Boundary (with v=0)\n
+    """
+    flagCode::Int32
 end
 
-# Default constructor
-#
-#
-# function CbsBoundaryDefinition(Int32::flagList,Int32::flagCode)
+"""
+    CbsBoundaryDefinition(filename::String)
 
-
-# Construct from file
-# 
-# filename = joinpath("ldc2d-re400","5000NUcav.bco");
-#
+Contruct from .bco file.
+"""
 function CbsBoundaryDefinition(filename::String)
     # check extension
     fileBase, fileExtension = splitext(filename)

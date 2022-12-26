@@ -1,8 +1,5 @@
-# Struct for reading and storing CBS flow parameters (.par file extension)
-#
-# Its mutable for convenience
-    
-mutable struct CbsFlowParamaters
+"CBS flow parameters from .par file."
+mutable struct CbsFlowParameters
     # Line 2
     restart::Bool
     
@@ -58,11 +55,16 @@ mutable struct CbsFlowParamaters
     runTimeControl::Bool # (0 - OFF, 1 - ON)
 
     # constructors
-    CbsFlowParamaters() = new()
+    CbsFlowParameters() = new()
 
 end
 
-function CbsFlowParamaters(filename::String)
+"""
+    CbsFlowParameters(filename::String)
+
+Contruct from .par file.
+"""
+function CbsFlowParameters(filename::String)
 
     # check extension
     fileBase, fileExtension = splitext(filename)
@@ -73,7 +75,7 @@ function CbsFlowParamaters(filename::String)
     # Construct from ascii file
     fid = open(filename,"r");
 
-    obj = CbsFlowParamaters()
+    obj = CbsFlowParameters()
                 
     skipLine = readline(fid);
     obj.restart = parse(Bool,strip(readline(fid))); 
@@ -149,5 +151,5 @@ function CbsFlowParamaters(filename::String)
 end
 
 # filename = joinpath("ldc2d-re400","5000NUcav.par");
-# cbsFlowParamaters = CbsFlowParamaters(filename);
-# println(cbsFlowParamaters)
+# CbsFlowParameters = CbsFlowParameters(filename);
+# println(CbsFlowParameters)
