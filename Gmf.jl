@@ -113,8 +113,6 @@ function writeVTK(gmf::Gmf,filename::String)
     close(fid);
 end
 
-filename = joinpath("ldc2d-re400","5000NUcav.plt");
-gmf = constructFromPltFile(filename);
-writeVTK(gmf,"test.vtk")
-
-# filename = "test.vtk"
+# filename = joinpath("ldc2d-re400","5000NUcav.plt");
+# gmf = constructFromPltFile(filename);
+# writeVTK(gmf,"test.vtk")
