@@ -1,4 +1,11 @@
-function testConvection()
+using SparseArrays
+using WriteVTK
+include("Gmf.jl")
+include("Tri2D.jl")
+include("SparseTriplet.jl")
+
+
+# function testConvection()
     filename = joinpath("ldc2d-re400","5000NUcav.plt");
     gmf = constructFromPltFile(filename);
     tri2d = Tri2D(gmf);
@@ -48,7 +55,7 @@ function testConvection()
     # Partition and solve
     u[f] = K[f,f]\(-K[f,s]*u[s]);
 
-    # Write data to vtk format
+    # Manually write data to vtk format
     vtkFilename = "test.vtk";
     writeVTK(gmf,vtkFilename);
     fid = open(vtkFilename,"a");
@@ -60,4 +67,20 @@ function testConvection()
     end
     close(fid);
 
-end
+    # use WriteVTK package to write XML VTK file
+    points = transpose(gmf.nodes);
+    cells = Array{MeshCell}(undef,nElements);
+    for i = 1:nElements
+        cells[i] = MeshCell(VTKCellTypes.VTK_TRIANGLE,gmf.tri[i,:]);
+    end
+    vtk_grid("testWriteVTK",points,cells) do vtu
+        vtu["Temp"] = u;
+    end
+
+# end
+
+using FiniteMesh
+cells, points = read_mesh("testWriteVTK.vtu")
+
+
+mesh = read_mesh("testWriteVTK.vtu")
